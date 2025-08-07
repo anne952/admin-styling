@@ -1,13 +1,13 @@
 import React from "react";
 import Layout from "../components/layout";
+import {clients} from "../js/client";
 import Table from "../components/table";
-import {Vendeurs} from "../js/vendeur";
 
-export default function Vendeur() {
-  return (
+export default function Clients() {
+  return  (
     <Layout>
-   <h1 className="font-bold ml-10 text-xl text-blue-500">Vendeurs</h1>
-    <div className="m-5 p-5 ">
+   <h1 className="font-bold ml-10 text-xl text-blue-500">Clients</h1>
+  <div className="m-5 p-5 ">
       <table className="w-full">
         <thead>
           <tr className="bg-blue-500 text-white text-center">
@@ -16,21 +16,23 @@ export default function Vendeur() {
             <th className="w-72">Email</th>
             <th className="w-72">Password</th>
             <th className="w-72">Url image</th>
+            <th className="w-72">Role</th>
             <th className="w-72">Action</th>
           </tr>
         </thead>
-        {Vendeurs.map((item)=>(
+        {clients.map((item)=>(
           <Table
           id={item.id}
           nom={item.nom}
           email={item.email}
           password={item.password}
           urlImage={item.urlImage}
+          role={item.role}
           supprimer
           />
         ))}
       </table>
     </div>
-    </Layout>
-  );
+  </Layout>
+);
 }

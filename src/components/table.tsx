@@ -15,6 +15,7 @@ interface TableProps {
     email?: string;
     password?: string;
     action?: string;
+    role?: string; 
 }
 
 export default function Table({
@@ -30,7 +31,8 @@ export default function Table({
     icon, 
     email, 
     password, 
-    action
+    action, 
+    role
 }: TableProps) {
     
     return (
@@ -45,6 +47,7 @@ export default function Table({
                 {prix !== undefined && <td className="p-4">{prix}</td>}
                 {location !== undefined && <td className="p-4">{location}</td>}
                 {date !== undefined && <td className="p-4">{date}</td>}
+                {role !== undefined && <td className="p-4">{role}</td>}
                 {(modifier || supprimer || icon) && (
                     <td className="p-4 flex gap-2 justify-center">
                         {modifier&&(

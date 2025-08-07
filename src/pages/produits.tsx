@@ -13,8 +13,8 @@ export default function Produits() {
           <tr className="bg-blue-500 text-white text-center">
             <th className="w-72">Id</th>
             <th className="w-72">Nom</th>
-            <th className="w-72">Description</th>
             <th className="w-72">Url image</th>
+            <th className="w-72">Description</th>
             <th className="w-72">Prix</th>
             <th className="w-72">Action</th>
           </tr>

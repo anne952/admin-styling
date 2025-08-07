@@ -57,14 +57,14 @@ function drawer() {
               <li
               className='hover:bg-blue-200 m-1 hover:text-black rounded-lg p-2'
               >
-                <a href="/clients" 
+                <a href="/users" 
                 className="text-center m-1 flex gap-1"
                 >
                   <UsersIcon className="h-6 w-6  text-blue-600" />
-                  Clients
+                  Utilisateurs
                   </a>
                   </li>
-                                <li
+                                {/* <li
               className='hover:bg-blue-200 m-1 hover:text-black rounded-lg p-2'
               >
                 <a href="/vendeurs" 
@@ -73,7 +73,7 @@ function drawer() {
                   <BuildingLibraryIcon className="h-6 w-6  text-blue-600" />
                   Vendeurs
                   </a>
-                  </li>
+                  </li> */}
                                 <li
               className='hover:bg-blue-200 m-1 hover:text-black rounded-lg p-2'
               >
