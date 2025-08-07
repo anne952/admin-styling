@@ -37,7 +37,7 @@ function drawer() {
               <li
               className='hover:bg-blue-200 m-1 hover:text-black rounded-lg p-2'
               >
-                <a href="/" 
+                <a href="/dashboard" 
                 className="text-center m-1 flex gap-1"
                 >
                    <Bars4Icon className="h-6 w-6  text-blue-600" />
@@ -95,10 +95,10 @@ function drawer() {
                   </a>
                   </li>
                                 <li
-              className='hover:bg-blue-200 m-1 hover:text-black rounded-lg p-2'
+              className='hover:bg-blue-200 mt-20 m-1 hover:text-black rounded-lg p-2'
               >
-                <a href="#" 
-                className="text-center m-1 mt-8 flex gap-1 text-blue-400"
+                <a href="/" 
+                className="text-center m-1  flex gap-1 text-blue-400"
                 >
                   Déconnexion
                   </a>
