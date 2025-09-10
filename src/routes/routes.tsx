@@ -5,8 +5,11 @@ import Users from "../pages/users";
 import Dashboard from "../pages/dashboard";
 import Paramétre from "../pages/parametre";
 import Action from "../pages/action";
-import Commandes from "../pages/commandes";
 import Login from "../pages/login";
+import Acceuil from "../pages/IN/acceuil";
+import NotificationPage from "../pages/notification";
+import VendorDetail from "../pages/vendor-detail";
+
 
 export default function AppRoutes() {
     return (
@@ -16,8 +19,10 @@ export default function AppRoutes() {
         <Route path="/produits" element={<Produits />} />
         <Route path="/users" element={<Users />} />
         <Route path="/action" element={<Action />} />
-        <Route path="/commandes" element={<Commandes />} />
         <Route path="/parametre" element={<Paramétre />} />
+        <Route path="/acceuil" element={<Acceuil />} />
+        <Route path="/notification" element={<NotificationPage />} />
+        <Route path="/vendeurs/:id" element={<VendorDetail />} />
         </Routes>
     );
     }

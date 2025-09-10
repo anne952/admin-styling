@@ -16,6 +16,8 @@ interface TableProps {
     password?: string;
     action?: string;
     role?: string; 
+    onDelete?: (id: number) => void;
+    onSelectRow?: (id: number) => void;
 }
 
 export default function Table({
@@ -32,12 +34,14 @@ export default function Table({
     email, 
     password, 
     action, 
-    role
+    role,
+    onDelete,
+    onSelectRow
 }: TableProps) {
     
     return (
         <tbody>
-            <tr className="text-center bg-slate-300 border">
+            <tr className="text-center bg-slate-300 border cursor-pointer" onClick={() => { if (onSelectRow && id !== undefined) onSelectRow(id); }}>
                 {id !== undefined && <td className="p-4">{id}</td>}
                 {nom !== undefined && <td className="p-4">{nom}</td>}
                 {email !== undefined && <td className="p-4">{email}</td>}
@@ -48,14 +52,16 @@ export default function Table({
                 {location !== undefined && <td className="p-4">{location}</td>}
                 {date !== undefined && <td className="p-4">{date}</td>}
                 {role !== undefined && <td className="p-4">{role}</td>}
-                {(modifier || supprimer || icon) && (
+                {(modifier || supprimer || icon || onDelete) && (
                     <td className="p-4 flex gap-2 justify-center">
                         {modifier&&(
                             <PencilSquareIcon color="blue" className="w-5" />
                         )
                         }
-                        {supprimer && (
-                            <TrashIcon color="red" className="w-5" />
+                        {(supprimer || onDelete) && (
+                            <button type="button" onClick={(e) => { e.stopPropagation(); if (onDelete && id !== undefined) onDelete(id); }}>
+                                <TrashIcon color="red" className="w-5" />
+                            </button>
                         )}
                         {icon && (
                             <CheckCircleIcon color="red" className="w-5" />

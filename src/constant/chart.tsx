@@ -9,6 +9,7 @@ import {
   Title,
   Tooltip,
   Legend,
+  Filler,
 } from "chart.js";
 
 Chart.register(
@@ -19,7 +20,8 @@ Chart.register(
   LinearScale,
   Title,
   Tooltip,
-  Legend
+  Legend,
+  Filler
 );
 
 const UserStatsChart = () => {
@@ -38,10 +40,10 @@ const UserStatsChart = () => {
       chartRef.current.destroy();
     }
 
-    // 🎨 Créer le gradient ici directement
-    const gradient = ctx.createLinearGradient(0, 0, 0, 400);
-    gradient.addColorStop(0, "rgba(255,0,255,0.5)");
-    gradient.addColorStop(1, "rgba(255,0,255,0)");
+    // 🎨 Dégradé plus doux
+    const gradient = ctx.createLinearGradient(0, 0, 0, 240);
+    gradient.addColorStop(0, "rgba(59,130,246,0.35)"); // blue-500 @ 35%
+    gradient.addColorStop(1, "rgba(59,130,246,0)");
 
     chartRef.current = new Chart(ctx, {
       type: "line",
@@ -54,22 +56,44 @@ const UserStatsChart = () => {
           {
             label: "Utilisateurs",
             data: [100, 120, 150, 130, 170, 200, 190, 210, 230, 240, 260, 300],
-            borderColor: "magenta",
+            borderColor: "#3B82F6", // blue-500
             backgroundColor: gradient,
             fill: true,
-            tension: 0.4,
-            pointRadius: 4,
+            tension: 0.35,
+            pointRadius: 2,
+            pointHoverRadius: 4,
+            borderWidth: 2,
           },
         ],
       },
       options: {
         responsive: true,
-        animation: false, // ← optionnel : pour éviter les animations
+        maintainAspectRatio: false,
+        animation: false,
+        layout: { padding: 8 },
         plugins: {
-          legend: { display: true },
+          legend: {
+            display: true,
+            labels: { color: "#374151" }, // gray-700
+          },
+          tooltip: {
+            backgroundColor: "rgba(17,24,39,0.9)", // gray-900
+            titleColor: "#fff",
+            bodyColor: "#E5E7EB", // gray-200
+            padding: 10,
+            cornerRadius: 6,
+          },
         },
         scales: {
-          y: { beginAtZero: true },
+          y: {
+            beginAtZero: true,
+            grid: { color: "rgba(156,163,175,0.2)" }, // gray-400 @20%
+            ticks: { color: "#6B7280" }, // gray-500
+          },
+          x: {
+            grid: { display: false },
+            ticks: { color: "#6B7280" },
+          },
         },
       },
     });
@@ -79,7 +103,11 @@ const UserStatsChart = () => {
     };
   }, []); // ← plus de dépendance ici
 
-  return <canvas ref={canvasRef} style={{ width: "100%", height: "13%", marginLeft: "50px" }} />;
+  return (
+    <div className="bg-white rounded-lg shadow-sm p-4 m-4" style={{ height: 320 }}>
+      <canvas ref={canvasRef} className="w-full h-full" />
+    </div>
+  );
 };
 
 export default UserStatsChart;

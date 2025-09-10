@@ -1,24 +1,22 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 export default function Login() {
   const [nom, setNom] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const { login } = useAuth();
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
-    // Validation des identifiants
-    if (nom === "andreuis" && password === "admin123") {
-      // Connexion réussie
+    try {
       setError("");
-      // Redirection vers le dashboard
+      await login({ nom, password });
       navigate("/dashboard");
-    } else {
-      // Erreur de connexion
-      setError("Nom d'utilisateur ou mot de passe incorrect");
+    } catch (err: any) {
+      setError(err?.message || "Erreur de connexion");
     }
   };
 

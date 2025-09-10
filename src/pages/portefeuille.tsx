@@ -3,10 +3,10 @@ import Layout from "../components/layout";
 
 
 
-export default function Commandes() {
+export default function Portefeuille() {
     return (
         <Layout>
-            <h1>Commandes</h1>
+            <h1>Portefeuille</h1>
         </Layout>
     );
 }
