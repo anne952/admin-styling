@@ -18,6 +18,9 @@ export const UsersService = {
   async list(): Promise<UserDto[]> {
     return http<UserDto[]>('/api/users');
   },
+  async updateMe(input: { nom: string }): Promise<void> {
+    await http<void>('/api/users/me', { method: 'PUT', body: JSON.stringify(input) });
+  },
   async get(id: number): Promise<UserDto> {
     return http<UserDto>(`/api/users/${id}`);
   },

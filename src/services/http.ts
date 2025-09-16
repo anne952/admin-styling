@@ -12,6 +12,13 @@ export async function http<T>(path: string, options: RequestInit & { method?: Ht
   if (token) headers['Authorization'] = `Bearer ${token}`;
   const res = await fetch(url, { ...options, headers });
   if (!res.ok) {
+    if (res.status === 401) {
+      // Supprimer le token et rediriger vers la page de login
+      localStorage.removeItem('auth_token');
+      window.location.href = '/login';
+      // Optionnel : forcer le rechargement
+      window.location.reload();
+    }
     const text = await res.text().catch(() => '');
     throw new Error(`HTTP ${res.status} ${res.statusText}: ${text}`);
   }

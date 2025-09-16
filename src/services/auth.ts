@@ -12,6 +12,12 @@ export interface MeDto {
 }
 
 export const AuthService = {
+  async register(input: { email?: string; nom?: string; password: string; role?: 'client' | 'vendeur' }): Promise<void> {
+    await http<void>('/api/auth/register', {
+      method: 'POST',
+      body: JSON.stringify(input),
+    });
+  },
   async login(input: { email?: string; nom?: string; password: string }): Promise<LoginResponse> {
     return http<LoginResponse>('/api/auth/login', {
       method: 'POST',
