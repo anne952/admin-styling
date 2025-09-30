@@ -8,7 +8,7 @@ import Action from "../pages/action";
 import Login from "../pages/login";
 import Acceuil from "../pages/IN/acceuil";
 import NotificationPage from "../pages/notification";
-import VendorDetail from "../pages/vendor-detail";
+import UserDetail from "../pages/vendor-detail";
 
 
 export default function AppRoutes() {
@@ -22,7 +22,7 @@ export default function AppRoutes() {
         <Route path="/parametre" element={<Paramétre />} />
         <Route path="/acceuil" element={<Acceuil />} />
         <Route path="/notification" element={<NotificationPage />} />
-        <Route path="/vendeurs/:id" element={<VendorDetail />} />
+        <Route path="/vendeurs/:id" element={<UserDetail />} />
         </Routes>
     );
     }

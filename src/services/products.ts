@@ -2,10 +2,14 @@ import { http } from './http';
 
 export interface ProductDto {
   id: number;
-  title: string;
+  title?: string;
+  nom?: string;
   description?: string;
-  price: number;
+  price?: number;
+  prix?: number;
   image?: string;
+  urlImage?: string;
+  productImages?: string[];
   image1?: string;
   image2?: string;
   image3?: string;
@@ -15,6 +19,9 @@ export interface ProductDto {
 export const ProductsService = {
   async list(): Promise<ProductDto[]> {
     return http<ProductDto[]>('/api/products');
+  },
+  async getByUser(userId: number): Promise<ProductDto[]> {
+    return http<ProductDto[]>(`/api/users/${userId}/products`);
   },
   async create(input: Omit<ProductDto, 'id'> & { vendorId?: number }): Promise<ProductDto> {
     return http<ProductDto>('/api/products', { method: 'POST', body: JSON.stringify(input) });

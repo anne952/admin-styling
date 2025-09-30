@@ -39,6 +39,12 @@ export default function Clients() {
     navigate(`/vendeurs/${id}`);
   };
 
+  const handleSelectClient = (id: number) => {
+    // Pour l'instant, on peut naviguer vers la même page de détail
+    // ou créer une page spécifique pour les clients
+    navigate(`/vendeurs/${id}`);
+  };
+
   const handleDeleteVendorProduct = (productId: number) => {
     if (!selectedVendor) return;
     setUsers(prev => prev.map(u => {
@@ -86,6 +92,7 @@ export default function Clients() {
                   password={item.password || '******'}
                   supprimer
                   onDelete={handleDeleteUser}
+                  onSelectRow={handleSelectClient}
                 />
               ))}
             </table>

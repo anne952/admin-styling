@@ -24,6 +24,28 @@ export default function Action() {
     ], []);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
+    const extractColor = React.useCallback((c: any): string => {
+        if (!c) return '#ffffff';
+        const tryNormalize = (v?: any): string | undefined => {
+            if (!v) return undefined;
+            const s = String(v).trim();
+            const m = s.match(/#([0-9a-fA-F]{6})/);
+            if (m) return `#${m[1]}`;
+            if (/^#([0-9a-fA-F]{3})$/.test(s)) return s;
+            if (/^rgb(a)?\(/i.test(s)) return s;
+            return undefined;
+        };
+        const candidates = [c.hex, c.color, c.couleur, c.code, c.value, c.val, c.rgb, c.rgba, c.name, c.nom, c.label, c.libelle];
+        for (const v of candidates) {
+            const n = tryNormalize(v);
+            if (n) return n;
+        }
+        for (const v of Object.values(c)) {
+            const n = tryNormalize(v);
+            if (n) return n;
+        }
+        return '#ffffff';
+    }, []);
 
     useEffect(() => {
         let mounted = true;
@@ -145,10 +167,7 @@ export default function Action() {
                         {colors.length > 0 && (
                             <div className="mt-4 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4">
                                 {colors.map((c) => {
-                                    const anyC: any = c as any;
-                                    const nameStr = String(anyC.name || "");
-                                    const match = nameStr.match(/#([0-9a-fA-F]{6})/);
-                                    const hex = anyC.hex || anyC.code || anyC.value || (match ? `#${match[1]}` : '#ffffff');
+                                    const hex = extractColor(c as any);
                                     return (
                                         <div key={c.id} className="relative rounded-xl h-20 shadow-sm ring-1 ring-black/5 transition-all duration-300 ease-in-out hover:-translate-y-0.5 hover:shadow-md" style={{ backgroundColor: hex }}>
                                             <button onClick={() => removeColor(c.id)} className="absolute top-1 right-1 text-xs bg-white/40 px-2 py-0.5 rounded">X</button>

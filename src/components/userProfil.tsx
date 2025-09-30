@@ -5,15 +5,17 @@ type UserProfileProps = {
   imageUrl: string;
   name: string;
   email: string;
+  onPhotoUpdate?: (newUrl: string) => void;
 };
 
-const UserProfile: React.FC<UserProfileProps> = ({ imageUrl, name, email }) => {
+const UserProfile: React.FC<UserProfileProps> = ({ imageUrl, name, email, onPhotoUpdate }) => {
   const [currentName, setCurrentName] = useState(name);
   const [isEditingName, setIsEditingName] = useState(false);
   const [newName, setNewName] = useState('');
   const [isChangingPassword, setIsChangingPassword] = useState(false);
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [uploading, setUploading] = useState(false);
 
   const handleNameChange = () => {
     setCurrentName(newName);
@@ -36,7 +38,29 @@ const UserProfile: React.FC<UserProfileProps> = ({ imageUrl, name, email }) => {
   return (
     <div className="bg-white rounded-lg shadow-sm p-6 max-w-2xl">
       <div className="flex items-center gap-4">
-        <img src={imageUrl} alt="Profile" className="w-16 h-16 rounded-full object-cover" />
+        <div className="flex items-center gap-2">
+          <img id="user-avatar" src={imageUrl} alt="Profile" className="w-16 h-16 rounded-full object-cover" />
+          <form onSubmit={async (e) => {
+            e.preventDefault();
+            const input = (e.currentTarget.querySelector('input[name="photoProfil"]') as HTMLInputElement | null);
+            const url = input?.value?.trim();
+            if (!url) return;
+            setUploading(true);
+            try {
+              const { ProfileService } = await import('../services/profile');
+              const res = await ProfileService.updatePhotoUrl(url);
+              const newUrl = res?.user?.photoProfil || url;
+              (document.querySelector('#user-avatar') as HTMLImageElement | null)?.setAttribute('src', newUrl);
+              if (onPhotoUpdate) onPhotoUpdate(newUrl);
+              if (input) input.value = '';
+            } finally {
+              setUploading(false);
+            }
+          }} className="flex items-center gap-2">
+            <input name="photoProfil" placeholder="URL de la photo" className="border rounded px-2 py-1 w-56" />
+            <button type="submit" className="px-3 py-1 bg-blue-600 text-white rounded text-sm">{uploading ? '...' : 'Mettre à jour'}</button>
+          </form>
+        </div>
         <div>
           <h2 className="text-xl font-semibold">{currentName}</h2>
           <p className="text-gray-600">{email}</p>
