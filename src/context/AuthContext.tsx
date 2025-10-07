@@ -40,8 +40,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const me = await AuthService.me();
       setUser(me);
+      localStorage.setItem('userId', me.id.toString());
     } catch {
       setUser(null);
+      localStorage.removeItem('userId');
     }
   }, []);
 
@@ -54,5 +56,3 @@ export function useAuth(): AuthContextValue {
   if (!ctx) throw new Error('useAuth must be used within AuthProvider');
   return ctx;
 }
-
-

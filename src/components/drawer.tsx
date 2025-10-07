@@ -63,12 +63,7 @@ function Drawer() {
                 Action
               </a>
             </li>
-            <li className="hover:bg-blue-200 m-1 hover:text-black rounded-lg p-2">
-              <a href="/notification" className="text-center m-1 flex gap-1">
-                  <BellIcon className="h-6 w-6 text-blue-600" />
-                Notification
-              </a>
-            </li>
+
             <li className="hover:bg-blue-200 m-1 hover:text-black rounded-lg p-2">
               <a href="/parametre" className="text-center m-1 flex gap-1">
                 <Cog6ToothIcon className="h-6 w-6 text-blue-600" />

@@ -38,28 +38,24 @@ const UserProfile: React.FC<UserProfileProps> = ({ imageUrl, name, email, onPhot
   return (
     <div className="bg-white rounded-lg shadow-sm p-6 max-w-2xl">
       <div className="flex items-center gap-4">
-        <div className="flex items-center gap-2">
-          <img id="user-avatar" src={imageUrl} alt="Profile" className="w-16 h-16 rounded-full object-cover" />
-          <form onSubmit={async (e) => {
-            e.preventDefault();
-            const input = (e.currentTarget.querySelector('input[name="photoProfil"]') as HTMLInputElement | null);
-            const url = input?.value?.trim();
-            if (!url) return;
-            setUploading(true);
-            try {
-              const { ProfileService } = await import('../services/profile');
-              const res = await ProfileService.updatePhotoUrl(url);
-              const newUrl = res?.user?.photoProfil || url;
-              (document.querySelector('#user-avatar') as HTMLImageElement | null)?.setAttribute('src', newUrl);
-              if (onPhotoUpdate) onPhotoUpdate(newUrl);
-              if (input) input.value = '';
-            } finally {
-              setUploading(false);
-            }
-          }} className="flex items-center gap-2">
-            <input name="photoProfil" placeholder="URL de la photo" className="border rounded px-2 py-1 w-56" />
-            <button type="submit" className="px-3 py-1 bg-blue-600 text-white rounded text-sm">{uploading ? '...' : 'Mettre à jour'}</button>
-          </form>
+        <div className="flex flex-col items-center gap-4">
+          <img id="user-avatar" src={imageUrl} alt="Profile" className="w-16 h-16 rounded-full object-cover mr-72" />
+          <div className="flex flex-col gap-2">
+            <input type="file" accept="image/*" onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (!file) return;
+              setUploading(true);
+              const reader = new FileReader();
+              reader.onload = (event) => {
+                const dataUrl = event.target?.result as string;
+                (document.querySelector('#user-avatar') as HTMLImageElement)?.setAttribute('src', dataUrl);
+                if (onPhotoUpdate) onPhotoUpdate(dataUrl);
+                setUploading(false);
+              };
+              reader.readAsDataURL(file);
+            }} className="text-sm" />
+            {uploading && <span className="text-xs text-gray-500">Chargement...</span>}
+          </div>
         </div>
         <div>
           <h2 className="text-xl font-semibold">{currentName}</h2>

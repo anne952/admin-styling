@@ -1,34 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import UserProfile from "../components/userProfil";
 import Layout from "../components/layout";
 import { ProfileService } from "../services/profile";
-import { UsersService } from "../services/users";
+import { useAuth } from "../context/AuthContext";
 
 const Parametre = () => {
-  const [user, setUser] = useState<any | null>(null);
-  const [loading, setLoading] = useState(true);
+  const { user: authUser } = useAuth();
+  const [user, setUser] = useState<any>({});
+  const [loading, setLoading] = useState(false);
 
-  React.useEffect(() => {
-    let mounted = true;
-    setLoading(true);
-    // Try to get current user ID from localStorage
-    const userId = localStorage.getItem('userId') ? Number(localStorage.getItem('userId')) : null;
-    if (userId) {
-      UsersService.get(userId)
-        .then((u) => { if (mounted) setUser(u); })
-        .catch((e) => { console.error('Erreur chargement user:', e); if (mounted) setUser(null); })
-        .finally(() => { if (mounted) setLoading(false); });
-    } else {
-      // If no userId in localStorage, set user to null or use a mock
-      console.warn('Aucun userId trouvé dans localStorage');
-      setUser(null);
-      setLoading(false);
+  useEffect(() => {
+    if (authUser) {
+      setUser(authUser);
     }
-    return () => { mounted = false; };
-  }, []);
+  }, [authUser]);
 
-  if (loading) return <Layout><p>Chargement...</p></Layout>;
-  if (!user) return <Layout><p>Utilisateur non trouvé.</p></Layout>;
+  if (!authUser) return <Layout><p>Utilisateur non trouvé.</p></Layout>;
 
   return (
     <Layout>
@@ -39,8 +26,8 @@ const Parametre = () => {
             <p className="text-gray-600 mt-2">Gérez votre profil, sécurité et préférences.</p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-            <div className="lg:col-span-1">
+          <div className="space-y-8">
+            <div className="flex justify-center lg:justify-start">
               <UserProfile
                 imageUrl={user.urlImage || user.photoProfil || 'https://via.placeholder.com/150'}
                 name={user.nom || 'Utilisateur'}
@@ -49,53 +36,51 @@ const Parametre = () => {
               />
             </div>
 
-            <div className="lg:col-span-3 space-y-6">
-              <section className="bg-white rounded-lg shadow-sm p-6">
-                <h2 className="text-lg font-semibold mb-4">Informations de l'entreprise</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <input className="border rounded px-3 py-2" placeholder="Nom de l'entreprise" />
-                  <input className="border rounded px-3 py-2" placeholder="Site web" />
-                  <input className="border rounded px-3 py-2" placeholder="Adresse" />
-                  <input className="border rounded px-3 py-2" placeholder="Ville" />
-                </div>
-                <div className="mt-4">
-                  <button className="px-4 py-2 bg-blue-600 text-white rounded">Enregistrer</button>
-                </div>
-              </section>
+            <section className="bg-gradient-to-br from-white to-gray-50 rounded-xl shadow-lg p-8 border border-gray-100">
+              <h2 className="text-xl font-bold text-blue-600 mb-6">Informations de l'entreprise</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <input className="border rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Nom de l'entreprise" />
+                <input className="border rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Site web" />
+                <input className="border rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Adresse" />
+                <input className="border rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Ville" />
+              </div>
+              <div className="mt-6">
+                <button className="px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-lg font-medium transition duration-200">Enregistrer</button>
+              </div>
+            </section>
 
-              <section className="bg-white rounded-lg shadow-sm p-6">
-                <h2 className="text-lg font-semibold mb-4">Préférences d'affichage</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <label className="flex items-center gap-2">
-                    <input type="checkbox" className="rounded" defaultChecked />
-                    <span>Activer le thème sombre</span>
-                  </label>
-                  <label className="flex items-center gap-2">
-                    <input type="checkbox" className="rounded" />
-                    <span>Mode compact</span>
-                  </label>
-                </div>
-              </section>
+            <section className="bg-gradient-to-br from-white to-gray-50 rounded-xl shadow-lg p-8 border border-gray-100">
+              <h2 className="text-xl font-bold text-blue-600 mb-6">Préférences d'affichage</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <label className="flex items-center gap-3 cursor-pointer">
+                  <input type="checkbox" className="w-5 h-5 rounded focus:ring-blue-500" defaultChecked />
+                  <span className="text-gray-700">Activer le thème sombre</span>
+                </label>
+                <label className="flex items-center gap-3 cursor-pointer">
+                  <input type="checkbox" className="w-5 h-5 rounded focus:ring-blue-500" />
+                  <span className="text-gray-700">Mode compact</span>
+                </label>
+              </div>
+            </section>
 
-              <section className="bg-white rounded-lg shadow-sm p-6">
-                <h2 className="text-lg font-semibold mb-4">Notifications</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <label className="flex items-center gap-2">
-                    <input type="checkbox" className="rounded" defaultChecked />
-                    <span>Recevoir les alertes produits</span>
-                  </label>
-                  <label className="flex items-center gap-2">
-                    <input type="checkbox" className="rounded" defaultChecked />
-                    <span>Recevoir les alertes utilisateurs</span>
-                  </label>
-                </div>
-              </section>
+            <section className="bg-gradient-to-br from-white to-gray-50 rounded-xl shadow-lg p-8 border border-gray-100">
+              <h2 className="text-xl font-bold text-blue-600 mb-6">Notifications</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <label className="flex items-center gap-3 cursor-pointer">
+                  <input type="checkbox" className="w-5 h-5 rounded focus:ring-blue-500" defaultChecked />
+                  <span className="text-gray-700">Recevoir les alertes produits</span>
+                </label>
+                <label className="flex items-center gap-3 cursor-pointer">
+                  <input type="checkbox" className="w-5 h-5 rounded focus:ring-blue-500" defaultChecked />
+                  <span className="text-gray-700">Recevoir les alertes utilisateurs</span>
+                </label>
+              </div>
+            </section>
 
-              <section className="bg-white rounded-lg shadow-sm p-6">
-                <h2 className="text-lg font-semibold mb-4">Profil vendeur</h2>
-                <VendorProfileForm />
-              </section>
-            </div>
+            <section className="bg-gradient-to-br from-white to-gray-50 rounded-xl shadow-lg p-8 border border-gray-100">
+              <h2 className="text-xl font-bold text-blue-600 mb-6">Profil vendeur</h2>
+              <VendorProfileForm />
+            </section>
           </div>
         </div>
       </div>

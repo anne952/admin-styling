@@ -21,7 +21,7 @@ export const AuthService = {
   async login(input: { email?: string; nom?: string; password: string }): Promise<LoginResponse> {
     return http<LoginResponse>('/api/auth/login', {
       method: 'POST',
-      body: JSON.stringify(input),
+      body: JSON.stringify({ ...input, app: 'admin' }),
     });
   },
   async logout(): Promise<void> {
@@ -31,5 +31,3 @@ export const AuthService = {
     return http<MeDto>('/api/auth/me');
   },
 };
-
-
